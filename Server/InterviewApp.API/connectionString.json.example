@@ -1,0 +1,4 @@
+﻿{
+  "ConnectionStrings": {
+    "Database": "Server=148.251.52.196;Database={user};User Id={user}; Password={password};Max Pool Size=5000;Pooling=True;"
+}

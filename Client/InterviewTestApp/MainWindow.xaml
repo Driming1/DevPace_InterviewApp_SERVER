@@ -1,0 +1,25 @@
+﻿<Window x:Class="InterviewTestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:customer="clr-namespace:InterviewTestApp.UserControls.Customer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Background="LightGray"
+                    Orientation="Vertical">
+            <ToggleButton x:Name="CustomersToggleButton"
+                              Content="Customers"
+                              Height="24"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Background="White">
+            <customer:CustomerListControl Visibility="{Binding IsChecked, ElementName=CustomersToggleButton, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}"/>
+        </Grid>
+    </Grid>
+</Window>

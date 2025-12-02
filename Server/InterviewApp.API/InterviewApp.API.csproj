@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="connectionString.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="connectionString.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SimpleInjector" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector.Integration.GenericHost" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector.Integration.ServiceCollection" Version="5.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Shared\InterviewApp.Models.Shared\InterviewApp.Models.Shared.csproj" />
+    <ProjectReference Include="..\InterviewApp.Data.Base\InterviewApp.Data.Base.csproj" />
+    <ProjectReference Include="..\InterviewApp.Data\InterviewApp.Data.csproj" />
+    <ProjectReference Include="..\InterviewApp.Services\InterviewApp.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
+</Project>

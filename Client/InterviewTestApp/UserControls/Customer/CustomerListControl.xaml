@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="InterviewTestApp.UserControls.Customer.CustomerListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             DataContext="{Binding CustomerList, Source={StaticResource DependencyLocator}}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Margin="10 6 10 12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Filters:"
+                       FontSize="14"
+                       FontWeight="SemiBold"/>
+
+            <StackPanel Grid.Row="1"  
+                       Orientation="Vertical"
+                       Margin="0 10 0 0">
+                <TextBlock Margin="0 0 0 4" 
+                           Text="Name:"/>
+                <TextBox Margin="0 0 0 8" 
+                         Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Margin="0 0 0 4" 
+                           Text="Email:"/>
+                <TextBox Margin="0 0 0 8" 
+                         Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBlock Margin="0 0 0 4" 
+                           Text="Phone:"/>
+                <TextBox Margin="0 0 0 8" 
+                         Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            </StackPanel>
+
+            <Button Grid.Row="2"
+                    Content="Search"
+                    Command="{Binding SearchCommand, Mode=OneWay}"/>
+        </Grid>
+
+        <DataGrid Grid.Column="1"
+                  ItemsSource="{Binding Items, Mode=OneWay}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name"
+                                    Width="*"
+                                    Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Email"
+                                    Width="*"
+                                    Binding="{Binding Email, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True"/>
+
+                <DataGridTextColumn Header="Phone"
+                                    Width="*"
+                                    Binding="{Binding Phone, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                    IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
