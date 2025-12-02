@@ -23,5 +23,23 @@ namespace InterviewApp.API.Controllers
             var result = _customerService.Search(filterModel);
             return new ListResponseModel<CustomerDto>(result);
         }
+
+        [HttpGet("{id:long}")]
+        public ActionResult<CustomerDto> Get(long id)
+        {
+            var dto = _customerService.GetById(id);
+            if (dto == null)
+                return NotFound();
+
+            return Ok(dto);
+        }
+
+        [Route("Save")]
+        [HttpPost]
+        public ActionResult<CustomerDto> Save(CustomerDto dto)
+        {
+            var saved = _customerService.Save(dto);
+            return Ok(saved);
+        }
     }
 }

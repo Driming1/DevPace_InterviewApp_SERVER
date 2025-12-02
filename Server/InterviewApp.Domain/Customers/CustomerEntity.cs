@@ -1,6 +1,6 @@
 ﻿using InterviewApp.Domain.Base;
 
-namespace InterviewApp.Domain
+namespace InterviewApp.Domain.Customers
 {
     public class CustomerEntity : EntityBase
     {
@@ -9,5 +9,6 @@ namespace InterviewApp.Domain
         public virtual string Phone { get; set; }
 
         public virtual string Email { get; set; }
+        public virtual ActiveState ActiveState { get; set; }
     }
 }

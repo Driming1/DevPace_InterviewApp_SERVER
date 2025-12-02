@@ -1,6 +1,6 @@
 ﻿using FluentNHibernate.Mapping;
 
-namespace InterviewApp.Domain
+namespace InterviewApp.Domain.Customers
 {
     public class CustomerMap : ClassMap<CustomerEntity>
     {
@@ -14,6 +14,7 @@ namespace InterviewApp.Domain
             Map(x => x.Name);
             Map(x => x.Phone);
             Map(x => x.Email);
+            Map(x => x.ActiveState).CustomType<ActiveState>();
         }
     }
 }
