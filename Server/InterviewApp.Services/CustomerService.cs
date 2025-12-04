@@ -29,14 +29,11 @@ namespace InterviewApp.Services
 
             if (string.IsNullOrWhiteSpace(filterModel.OrderBy))
             {
-                filterModel.OrderBy = nameof(CustomerDto.Name);
+                filterModel.OrderBy = nameof(CustomerDto.Id);
                 filterModel.OrderDirection = OrderDirection.Ascending;
             }
 
-            if (!filterModel.ActiveState.HasValue)
-            {
-                filterModel.ActiveState = DtoActiveState.Active;
-            }
+            filterModel.ActiveState = filterModel.ActiveState;
 
             return _customerRepository.Search(filterModel);
         }

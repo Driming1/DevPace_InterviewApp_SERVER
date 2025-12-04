@@ -1,6 +1,8 @@
 ﻿<UserControl x:Class="InterviewTestApp.UserControls.Customer.CustomerListControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:InterviewTestApp.Helpers.Behaviors"
              DataContext="{Binding CustomerList, Source={StaticResource DependencyLocator}}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -36,6 +38,19 @@
                            Text="Phone:"/>
                 <TextBox Margin="0 0 0 8" 
                          Text="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBlock Margin="0 0 0 4"
+                           Text="ActiveState:"/>
+                <ComboBox Margin="0 0 0 8"
+              ItemsSource="{Binding ActiveStateValues}"
+              SelectedItem="{Binding ActiveState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+                <Button Grid.Row="1"
+                    Margin="0,8,0,0"
+                    HorizontalAlignment="Left"
+                    Content="Load more"
+                    Command="{Binding LoadMoreCommand}"
+                    IsEnabled="{Binding HasMore}"/>
             </StackPanel>
 
             <Button Grid.Row="2"
@@ -44,25 +59,40 @@
         </Grid>
 
         <DataGrid Grid.Column="1"
-                  ItemsSource="{Binding Items, Mode=OneWay}"
-                  AutoGenerateColumns="False"
-                  CanUserAddRows="False">
+          ItemsSource="{Binding Items, Mode=OneWay}"
+          AutoGenerateColumns="False"
+          EnableRowVirtualization="True"
+          EnableColumnVirtualization="True"
+          CanUserAddRows="False">
+            <i:Interaction.Behaviors>
+                <behaviors:InfiniteScrollBehavior 
+            LoadMoreCommand="{Binding LoadMoreCommand}"
+            Threshold="10" />
+            </i:Interaction.Behaviors>
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name"
-                                    Width="*"
-                                    Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True"/>
+                        Width="*"
+                        Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsReadOnly="True"/>
 
                 <DataGridTextColumn Header="Email"
-                                    Width="*"
-                                    Binding="{Binding Email, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True"/>
+                        Width="*"
+                        Binding="{Binding Email, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsReadOnly="True"/>
 
                 <DataGridTextColumn Header="Phone"
-                                    Width="*"
-                                    Binding="{Binding Phone, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                                    IsReadOnly="True"/>
+                        Width="*"
+                        Binding="{Binding Phone, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsReadOnly="True"/>
+
+                <DataGridTextColumn Width="*"
+                            Binding="{Binding ActiveState, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsReadOnly="True"
+                           CanUserSort="False" >
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+
     </Grid>
 </UserControl>

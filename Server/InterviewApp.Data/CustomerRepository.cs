@@ -1,9 +1,10 @@
-﻿using System.Linq;
-using InterviewApp.Data.Base;
+﻿using InterviewApp.Data.Base;
 using InterviewApp.Domain.Customers;
 using InterviewApp.Models.Shared;
 using InterviewApp.Models.Shared.Enums;
+using NHibernate;
 using NHibernate.Transform;
+using System.Linq;
 
 namespace InterviewApp.Data
 {
@@ -26,25 +27,37 @@ namespace InterviewApp.Data
                                  :skip,
                                  :take";
 
-            var allowedSortColumns = new[] { "Name", "Email", "CreateDate", "ActiveState" };
+            var allowedSortColumns = new[] { "Id", "Name", "Email", "CreateDate", "ActiveState" };
             var sortColumn = filterModel.OrderBy;
 
             if (string.IsNullOrWhiteSpace(sortColumn) || !allowedSortColumns.Contains(sortColumn))
             {
-                sortColumn = "CreateDate";
+                sortColumn = "Id";
             }
 
             var sortDirection = filterModel.OrderDirection == OrderDirection.Descending ? "DESC" : "ASC";
 
             return DataProvider.Session.CreateSQLQuery(sql)
-                .SetParameter("name", (object?)filterModel.Name ?? DBNull.Value)
-                .SetParameter("email", (object?)filterModel.Email ?? DBNull.Value)
-                .SetParameter("phone", (object?)filterModel.Phone ?? DBNull.Value)
-                .SetParameter("activeState", filterModel.ActiveState.HasValue ? (byte?)filterModel.ActiveState.Value : null)
-                .SetParameter("sortColumn", sortColumn)
-                .SetParameter("sortDirection", sortDirection)
-                .SetParameter("skip", (int)filterModel.Skip)
-                .SetParameter("take", (int)filterModel.Take)
+                .SetParameter(
+                    "name",
+                    string.IsNullOrWhiteSpace(filterModel.Name) ? null : filterModel.Name,
+                    NHibernateUtil.String)
+                .SetParameter(
+                    "email",
+                    string.IsNullOrWhiteSpace(filterModel.Email) ? null : filterModel.Email,
+                    NHibernateUtil.String)
+                .SetParameter(
+                    "phone",
+                    string.IsNullOrWhiteSpace(filterModel.Phone) ? null : filterModel.Phone,
+                    NHibernateUtil.String)
+                .SetParameter(
+                    "activeState",
+                    (byte)filterModel.ActiveState,
+                    NHibernateUtil.Byte)
+                .SetParameter("sortColumn", sortColumn, NHibernateUtil.String)
+                .SetParameter("sortDirection", sortDirection, NHibernateUtil.String)
+                .SetParameter("skip", (int)filterModel.Skip, NHibernateUtil.Int32)
+                .SetParameter("take", (int)filterModel.Take, NHibernateUtil.Int32)
                 .SetResultTransformer(Transformers.AliasToBean<CustomerDto>())
                 .List<CustomerDto>();
         }
