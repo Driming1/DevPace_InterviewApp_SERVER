@@ -65,8 +65,62 @@ INSERT INTO [Customers]
     [CreateDate]
 )
 SELECT
-    [Name]        = N'Customer ' + CAST(n AS NVARCHAR(10)),
-    [Email]       = N'driming' + CAST(n AS NVARCHAR(10)) + N'@example.com',
+    [Name] =
+        (CASE n % 10
+             WHEN 0 THEN N'Michael'
+             WHEN 1 THEN N'Olena'
+             WHEN 2 THEN N'Andriy'
+             WHEN 3 THEN N'Sophia'
+             WHEN 4 THEN N'Ivan'
+             WHEN 5 THEN N'Natalia'
+             WHEN 6 THEN N'Dmytro'
+             WHEN 7 THEN N'Anna'
+             WHEN 8 THEN N'Volodymyr'
+             WHEN 9 THEN N'Kateryna'
+         END)
+        + N' ' +
+        (CASE (n / 10) % 10
+             WHEN 0 THEN N'Shevchenko'
+             WHEN 1 THEN N'Kovalenko'
+             WHEN 2 THEN N'Sokolov'
+             WHEN 3 THEN N'Melnyk'
+             WHEN 4 THEN N'Petrenko'
+             WHEN 5 THEN N'Romanov'
+             WHEN 6 THEN N'Brown'
+             WHEN 7 THEN N'Johnson'
+             WHEN 8 THEN N'Smith'
+             WHEN 9 THEN N'Garcia'
+         END),
+    [Email] =
+        LOWER(
+            (CASE n % 10
+                 WHEN 0 THEN N'michael'
+                 WHEN 1 THEN N'olena'
+                 WHEN 2 THEN N'andriy'
+                 WHEN 3 THEN N'sophia'
+                 WHEN 4 THEN N'ivan'
+                 WHEN 5 THEN N'natalia'
+                 WHEN 6 THEN N'dmytro'
+                 WHEN 7 THEN N'anna'
+                 WHEN 8 THEN N'volodymyr'
+                 WHEN 9 THEN N'kateryna'
+             END)
+            + N'.' +
+            (CASE (n / 10) % 10
+                 WHEN 0 THEN N'shevchenko'
+                 WHEN 1 THEN N'kovalenko'
+                 WHEN 2 THEN N'sokolov'
+                 WHEN 3 THEN N'melnyk'
+                 WHEN 4 THEN N'petrenko'
+                 WHEN 5 THEN N'romanov'
+                 WHEN 6 THEN N'brown'
+                 WHEN 7 THEN N'johnson'
+                 WHEN 8 THEN N'smith'
+                 WHEN 9 THEN N'garcia'
+             END)
+        )
+        + CAST(n AS NVARCHAR(10))
+        + N'@example.com',
     [Phone]       = N'+380' + RIGHT('000000000' + CAST(n AS NVARCHAR(9)), 9),
     [ActiveState] = CASE WHEN n % 2 = 0 THEN 1 ELSE 0 END,
     [CreateDate]  = DATEADD(DAY, - (n % 5), GETUTCDATE())

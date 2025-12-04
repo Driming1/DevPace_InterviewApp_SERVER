@@ -22,7 +22,7 @@ namespace InterviewApp.Services
                 throw new ArgumentNullException(nameof(filterModel));
 
             if (filterModel.Take <= 0)
-                filterModel.Take = 50;
+                filterModel.Take = 100;
 
             if (filterModel.Skip < 0)
                 filterModel.Skip = 0;

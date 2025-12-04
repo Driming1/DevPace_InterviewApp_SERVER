@@ -63,33 +63,94 @@
           AutoGenerateColumns="False"
           EnableRowVirtualization="True"
           EnableColumnVirtualization="True"
-          CanUserAddRows="False">
+          CanUserSortColumns="False"
+          CanUserAddRows="False"
+          ColumnWidth="*">
             <i:Interaction.Behaviors>
                 <behaviors:InfiniteScrollBehavior 
             LoadMoreCommand="{Binding LoadMoreCommand}"
             Threshold="10" />
             </i:Interaction.Behaviors>
 
+            <DataGrid.Resources>
+                <Style TargetType="DataGridColumnHeader">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="0"/>
+                </Style>
+            </DataGrid.Resources>
+
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name"
-                        Width="*"
-                        Binding="{Binding Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsReadOnly="True"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Name}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.SortByNameCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                                <TextBlock Text="Name"
+                                   Margin="4,0,4,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Email"
-                        Width="*"
-                        Binding="{Binding Email, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsReadOnly="True"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Email}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.SortByEmailCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                                <TextBlock Text="Email"
+                                   Margin="4,0,4,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Phone"
-                        Width="*"
-                        Binding="{Binding Phone, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                        IsReadOnly="True"/>
+                <DataGridTextColumn Width="*" Binding="{Binding Phone}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.SortByPhoneCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                                <TextBlock Text="Phone"
+                                   Margin="4,0,4,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
+                </DataGridTextColumn>
 
-                <DataGridTextColumn Width="*"
-                            Binding="{Binding ActiveState, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                            IsReadOnly="True"
-                           CanUserSort="False" >
+                <DataGridTextColumn Width="*" Binding="{Binding ActiveState}">
+                    <DataGridTextColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding DataContext.SortByActiveStateCommand,
+                                              RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
+                                <TextBlock Text="ActiveState"
+                                   Margin="4,0,4,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
