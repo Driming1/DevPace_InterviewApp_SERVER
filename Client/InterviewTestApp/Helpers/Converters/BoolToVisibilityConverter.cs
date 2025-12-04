@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace InterviewTestApp.Converters;
+namespace InterviewTestApp.Helpers.Converters;
 
 public class BoolToVisibilityConverter : IValueConverter 
 {

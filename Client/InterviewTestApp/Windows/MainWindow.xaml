@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:customer="clr-namespace:InterviewTestApp.UserControls.Customer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        Title="MainWindow" Height="1080" Width="1920" WindowState="Maximized">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -16,6 +16,13 @@
             <ToggleButton x:Name="CustomersToggleButton"
                               Content="Customers"
                               Height="24"/>
+            <TextBlock x:Name="Total"
+               Text="Total: 0"
+               Margin="4,0,0,4"/>
+
+            <TextBlock x:Name="Selected"
+               Text="Selected: 0"
+               Margin="4,0,0,0"/>
         </StackPanel>
 
         <Grid Grid.Column="1" Background="White">

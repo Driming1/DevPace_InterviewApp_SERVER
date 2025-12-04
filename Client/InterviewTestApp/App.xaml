@@ -2,9 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:locators="clr-namespace:InterviewTestApp.Locators"
-             xmlns:converters="clr-namespace:InterviewTestApp.Converters"
+             xmlns:converters="clr-namespace:InterviewTestApp.Helpers.Converters"
              Startup="Application_Startup"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
         <locators:DependencyLocator x:Key="DependencyLocator"/>
 

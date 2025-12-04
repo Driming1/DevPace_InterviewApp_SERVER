@@ -1,4 +1,5 @@
 ﻿using InterviewApp.Models.Shared.Base;
+using InterviewApp.Models.Shared.Enums;
 
 namespace InterviewApp.Models.Shared
 {
@@ -9,5 +10,6 @@ namespace InterviewApp.Models.Shared
         public string Phone { get; set; }
 
         public string Email { get; set; }
+        public ActiveState ActiveState { get; set; }
     }
 }

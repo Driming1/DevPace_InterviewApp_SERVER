@@ -1,9 +1,11 @@
-using InterviewApp.API;
+﻿using InterviewApp.API;
 
 public class Program
 {
     public static void Main(string[] args)
     {
+#warning убедится что так корректно и безопасно
+        AppContext.SetSwitch("System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization", true);
         CreateHostBuilder(args).Build().Run();
     }
 
