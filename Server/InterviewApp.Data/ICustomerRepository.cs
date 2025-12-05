@@ -8,5 +8,6 @@ namespace InterviewApp.Data
         IList<CustomerDto> Search(CustomerFilter filterModel);
         CustomerEntity GetById(long id);
         void Save(CustomerEntity entity);
+        bool IsEmailUnique(string email, long? id);
     }
 }

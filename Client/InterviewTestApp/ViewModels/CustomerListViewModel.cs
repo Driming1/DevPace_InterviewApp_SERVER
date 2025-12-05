@@ -1,13 +1,16 @@
-﻿using System.Collections.ObjectModel;
-using InterviewApp.Models.Shared;
+﻿using InterviewApp.Models.Shared;
 using InterviewApp.Models.Shared.Enums;
 using InterviewTestApp.Remote.Services;
 using InterviewTestApp.ViewModels.Base;
 using InterviewTestApp.ViewModels.Base.Core;
+using InterviewTestApp.ViewModels.Items;
+using InterviewTestApp.Windows;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace InterviewTestApp.ViewModels;
 
-public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, CustomerDto>
+public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, CustomerItemViewModel>
 {
     private const int PageSize = 100;
 
@@ -27,15 +30,23 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
     private readonly SimpleAsyncDelegateCommand _sortByPhoneCommand;
     private readonly SimpleAsyncDelegateCommand _sortByActiveStateCommand;
     private readonly SimpleAsyncDelegateCommand _loadMoreCommand;
+    private readonly DelegateCommand _createNewCustomerCommand;
+    private readonly DelegateCommand<CustomerItemViewModel> _editCustomerCommand;
 
+    private readonly CustomerService _service;
     public CustomerListViewModel(CustomerService service)
         : base(service)
     {
+        this._service = service;
+
         _sortByNameCommand = new SimpleAsyncDelegateCommand(SortByNameAsync);
         _sortByEmailCommand = new SimpleAsyncDelegateCommand(SortByEmailAsync);
         _sortByPhoneCommand = new SimpleAsyncDelegateCommand(SortByPhoneAsync);
         _sortByActiveStateCommand = new SimpleAsyncDelegateCommand(SortByActiveStateAsync);
         _loadMoreCommand = new SimpleAsyncDelegateCommand(LoadMoreAsync);
+
+        _createNewCustomerCommand = new DelegateCommand(CreateNewCustomer);
+        _editCustomerCommand = new DelegateCommand<CustomerItemViewModel>(EditCustomer);
     }
 
     #region Commands
@@ -45,11 +56,12 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
     public SimpleAsyncDelegateCommand SortByEmailCommand => _sortByEmailCommand;
     public SimpleAsyncDelegateCommand SortByPhoneCommand => _sortByPhoneCommand;
     public SimpleAsyncDelegateCommand SortByActiveStateCommand => _sortByActiveStateCommand;
+    public DelegateCommand CreateNewCustomerCommand => _createNewCustomerCommand;
+    public DelegateCommand<CustomerItemViewModel> EditCustomerCommand => _editCustomerCommand;
 
     #endregion
 
     #region Properties
-
     public string Name
     {
         get => _name;
@@ -106,6 +118,72 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
     #endregion
 
     #region Methods
+    private void CreateNewCustomer()
+    {
+        var vm = new CustomerCreateEditViewModel(_service)
+        {
+            Id = 0,
+            Name = string.Empty,
+            Email = string.Empty,
+            Phone = string.Empty,
+            ActiveState = ActiveState.Active
+        };
+
+        var window = new CustomerCreateEditView
+        {
+            Owner = Application.Current.MainWindow,
+            DataContext = vm
+        };
+
+        vm.CloseAction = result =>
+        {
+            window.DialogResult = result;
+            window.Close();
+        };
+        var result = window.ShowDialog();
+
+        if (result != null && result == true)
+        {
+            MessageBox.Show("User saved successfull");
+        }
+    }
+    private void EditCustomer(CustomerItemViewModel item)
+    {
+        if (item == null || item.Id == null)
+            return;
+
+        var vm = new CustomerCreateEditViewModel(_service)
+        {
+            Id = (long)item.Id,
+            Name = item.Name,
+            Email = item.Email,
+            Phone = item.Phone,
+            ActiveState = item.ActiveState
+        };
+
+        var window = new CustomerCreateEditView
+        {
+            Owner = Application.Current.MainWindow,
+            DataContext = vm
+        };
+
+        vm.CloseAction = result =>
+        {
+            window.DialogResult = result;
+            window.Close();
+        };
+        var result = window.ShowDialog();
+
+        if (vm.SavedCustomer != null)
+        {
+            item.UpdateFrom(vm.SavedCustomer);
+        }
+
+        if (result != null && result == true)
+        {
+            MessageBox.Show("User edited successfull");
+        }
+    }
     protected override void ApplySearchParams()
     {
         Filter.OrderBy = OrderBy;
@@ -128,7 +206,7 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             ActiveState = ActiveState
         };
 
-        Items = new ObservableCollection<CustomerDto>();
+        Items = new ObservableCollection<CustomerItemViewModel>();
 
         _currentSkip = 0;
         HasMore = true;
@@ -143,7 +221,7 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
         HasMore = true;
 
         if (Items == null)
-            Items = new ObservableCollection<CustomerDto>();
+            Items = new ObservableCollection<CustomerItemViewModel>();
         else
             Items.Clear();
 
@@ -174,7 +252,7 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
 
             if (reset)
             {
-                Items = new ObservableCollection<CustomerDto>(list);
+                Items = new ObservableCollection<CustomerItemViewModel>(list);
             }
             else
             {
@@ -216,9 +294,9 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
     private Task<bool> SortByPhoneAsync() => ApplySortAndReloadAsync("Phone");
     private Task<bool> SortByActiveStateAsync() => ApplySortAndReloadAsync("ActiveState");
 
-    protected override IList<CustomerDto> MapSearchResults(IList<CustomerDto> items)
+    protected override IList<CustomerItemViewModel> MapSearchResults(IList<CustomerDto> items)
     {
-        return items;
+        return items.Select(dto => new CustomerItemViewModel(dto)).ToList();
     }
 
     #endregion

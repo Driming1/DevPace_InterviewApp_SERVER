@@ -25,13 +25,15 @@ namespace InterviewApp.API.Controllers
         }
 
         [HttpGet("{id:long}")]
-        public ActionResult<CustomerDto> Get(long id)
+        public ActionResult<ApiResponseModel<CustomerDto>> Get(long id)
         {
             var dto = _customerService.GetById(id);
             if (dto == null)
-                return NotFound();
+            {
+                return NotFound(ApiResponseModel.CreateError<ApiResponseModel<CustomerDto>>("NotFound", "Customer not found"));
+            }
 
-            return Ok(dto);
+            return Ok(new ApiResponseModel<CustomerDto>(dto));
         }
 
         [Route("Save")]
@@ -40,6 +42,14 @@ namespace InterviewApp.API.Controllers
         {
             var saved = _customerService.Save(dto);
             return Ok(saved);
+        }
+
+        [Route("IsEmailUnique")]
+        [HttpPost]
+        public ApiResponseModel<bool> IsEmailUnique(EmailCheckRequest dto)
+        {
+            var result = _customerService.IsEmailUnique(dto.Email, dto.Id);
+            return new ApiResponseModel<bool>(result);
         }
     }
 }

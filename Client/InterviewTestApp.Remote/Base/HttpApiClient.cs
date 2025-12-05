@@ -59,7 +59,7 @@ public class HttpApiClient
 
     public async Task<ListResponseModel<TResponse>> PostList<TResponse>(string action)
     {
-        var result =  await RunRequest<object, ListResponseModel<TResponse>>(action, null, RequestType.Post);
+        var result = await RunRequest<object, ListResponseModel<TResponse>>(action, null, RequestType.Post);
         if (result == null)
         {
             result = new ListResponseModel<TResponse>(new List<TResponse>());
@@ -72,6 +72,10 @@ public class HttpApiClient
     {
         var result = await RunRequest<TModel, ApiResponseModel<TResponse>>(action, model, RequestType.Post);
         return result != null ? result.Model : default;
+    }
+    public async Task<ApiResponseModel<TResult>> PostApiResponse<TModel, TResult>(string action, TModel model)
+    {
+        return await RunRequest<TModel, ApiResponseModel<TResult>>(action, model, RequestType.Post);
     }
 
     public async Task<ListResponseModel<TResponse>> PostList<TModel, TResponse>(string action, TModel model)
@@ -93,7 +97,7 @@ public class HttpApiClient
         Task<IFlurlResponse> task = null;
 
         var url = BuildUrl(action);
-        //Это можно переписать на switch expression в C# 8
+
         if (requestType == RequestType.Get)
         {
             if (!EqualityComparer<TModel>.Default.Equals(model, default(TModel)))
