@@ -135,9 +135,17 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             DataContext = vm
         };
 
-        vm.CloseAction = () => window.Close();
+        vm.CloseAction = result =>
+        {
+            window.DialogResult = result;
+            window.Close();
+        };
+        var result = window.ShowDialog();
 
-        window.ShowDialog();
+        if (result != null && result == true)
+        {
+            MessageBox.Show("User saved successfull");
+        }
     }
     private void EditCustomer(CustomerItemViewModel item)
     {
@@ -159,12 +167,21 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             DataContext = vm
         };
 
-        vm.CloseAction = () => window.Close();
-        window.ShowDialog();
+        vm.CloseAction = result =>
+        {
+            window.DialogResult = result;
+            window.Close();
+        };
+        var result = window.ShowDialog();
 
         if (vm.SavedCustomer != null)
         {
             item.UpdateFrom(vm.SavedCustomer);
+        }
+
+        if (result != null && result == true)
+        {
+            MessageBox.Show("User edited successfull");
         }
     }
     protected override void ApplySearchParams()

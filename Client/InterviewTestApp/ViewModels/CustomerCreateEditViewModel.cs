@@ -22,7 +22,7 @@ namespace InterviewTestApp.ViewModels
         private readonly CustomerService _service;
         private readonly SimpleAsyncDelegateCommand _saveCommand;
         private readonly DelegateCommand _cancelCommand;
-        public Action CloseAction { get; set; }
+        public Action<bool?> CloseAction { get; set; }
 
         #endregion
 
@@ -136,17 +136,17 @@ namespace InterviewTestApp.ViewModels
             try
             {
                 await _service.SaveAsync(dto);
-                if (Id != null)
+                if (Id != null && Id != 0)
                 {
                     SavedCustomer = await _service.GetByIdAsync(Id);
                 }
-                Cancel();
 
+                CloseAction?.Invoke(true);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                CloseAction?.Invoke(false);
                 return false;
-                throw;
             }
 
             return true;
@@ -154,7 +154,7 @@ namespace InterviewTestApp.ViewModels
 
         private void Cancel()
         {
-            CloseAction?.Invoke();
+            CloseAction?.Invoke(false);
         }
 
         #endregion
@@ -226,10 +226,7 @@ namespace InterviewTestApp.ViewModels
             ClearErrors(nameof(Phone));
 
             if (string.IsNullOrWhiteSpace(Phone))
-            {
-                AddError(nameof(Phone), "Phone is required.");
                 return;
-            }
 
             if (!Regex.IsMatch(Phone, @"^\+\d+$"))
             {
