@@ -41,5 +41,13 @@ namespace InterviewApp.API.Controllers
             var saved = _customerService.Save(dto);
             return Ok(saved);
         }
+
+        [Route("IsEmailUnique")]
+        [HttpPost]
+        public ApiResponseModel<bool> IsEmailUnique(CustomerDto dto)
+        {
+            var result = _customerService.IsEmailUnique(dto.Email, dto.Id);
+            return new ApiResponseModel<bool>(result);
+        }
     }
 }

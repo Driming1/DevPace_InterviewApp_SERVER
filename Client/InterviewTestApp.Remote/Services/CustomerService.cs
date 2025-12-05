@@ -1,4 +1,5 @@
 ﻿using InterviewApp.Models.Shared;
+using InterviewApp.Models.Shared.ApiResponse;
 using InterviewTestApp.Remote.Base;
 using InterviewTestApp.Remote.Base.Services;
 
@@ -18,5 +19,16 @@ public class CustomerService : ISearchService<CustomerFilter, CustomerDto>
     {
         var result = await _httpClient.PostList<CustomerFilter, CustomerDto>("Search", filter);
         return result.List;
+    }
+    public async Task<CustomerDto> SaveAsync(CustomerDto dto)
+    {
+        return await _httpClient.Post<CustomerDto, CustomerDto>("Save", dto);
+    }
+
+    public async Task<bool> IsEmailUniqueAsync(string email, long? excludeId = null)
+    {
+        var response = await _httpClient.Post<object, ApiResponseModel<bool>>
+            ("IsEmailUnique", new { email, id = excludeId });
+        return response.Model;
     }
 }

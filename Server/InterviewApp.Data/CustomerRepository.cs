@@ -71,5 +71,19 @@ namespace InterviewApp.Data
         {
             base.Save(entity);
         }
+
+        public bool IsEmailUnique(string email, long? id)
+        {
+            var query = DataProvider.Session.Query<CustomerEntity>()
+                .Where(x => x.Email == email);
+
+            if (id.HasValue)
+            {
+                query = query.Where(x => x.Id != id.Value);
+            }
+
+            return !query.Any();
+        }
+
     }
 }

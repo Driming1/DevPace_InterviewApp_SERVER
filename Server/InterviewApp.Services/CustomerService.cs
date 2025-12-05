@@ -33,8 +33,6 @@ namespace InterviewApp.Services
                 filterModel.OrderDirection = OrderDirection.Ascending;
             }
 
-            filterModel.ActiveState = filterModel.ActiveState;
-
             return _customerRepository.Search(filterModel);
         }
 
@@ -72,7 +70,13 @@ namespace InterviewApp.Services
 
             return dto;
         }
+        public bool IsEmailUnique(string email, long? id)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentNullException(nameof(email));
 
+            return _customerRepository.IsEmailUnique(email, id);
+        }
         private static CustomerDto MapToDto(CustomerEntity entity)
         {
             return new CustomerDto

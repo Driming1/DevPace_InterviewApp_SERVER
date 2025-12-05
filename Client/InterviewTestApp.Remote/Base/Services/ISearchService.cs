@@ -3,4 +3,4 @@
 public interface ISearchService<TFilter, TModel>
 {
     Task<IList<TModel>> Search(TFilter filter);
-}
+}   

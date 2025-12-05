@@ -137,15 +137,6 @@ BEGIN
 END
 GO
 
-IF EXISTS (
-    SELECT 1 FROM sys.indexes 
-    WHERE name = 'IX_Customers_ActiveState_Name_Email_Phone' 
-      AND object_id = OBJECT_ID('dbo.Customers')
-)
-BEGIN
-    DROP INDEX IX_Customers_ActiveState_Name_Email_Phone ON [Customers];
-END
-GO
 
 IF NOT EXISTS (
     SELECT 1 FROM sys.indexes 
@@ -154,8 +145,8 @@ IF NOT EXISTS (
 )
 BEGIN
     CREATE NONCLUSTERED INDEX IX_Customers_Search
-        ON [Customers] (ActiveState, Name)
-        INCLUDE (Email, Phone, CreateDate);
+        ON [Customers] (ActiveState, Name,Email, Phone);
+        
 END
 GO
 
@@ -166,7 +157,7 @@ IF NOT EXISTS (
 )
 BEGIN
     CREATE NONCLUSTERED INDEX IX_Customers_ActiveState_CreateDate
-        ON [Customers] (ActiveState, CreateDate, Id);
+        ON [Customers] (ActiveState, Id);
 END
 GO
 
