@@ -140,11 +140,18 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             window.DialogResult = result;
             window.Close();
         };
-        var result = window.ShowDialog();
-
-        if (result != null && result == true)
+        try
         {
-            MessageBox.Show("User saved successfull");
+            var result = window.ShowDialog();
+
+            if (result != null && result == true)
+            {
+                MessageBox.Show("User saved successfull");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error opening customer editor: {ex.Message}");
         }
     }
     private void EditCustomer(CustomerItemViewModel item)
@@ -172,17 +179,25 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             window.DialogResult = result;
             window.Close();
         };
-        var result = window.ShowDialog();
-
-        if (vm.SavedCustomer != null)
+        try
         {
-            item.UpdateFrom(vm.SavedCustomer);
+            var result = window.ShowDialog();
+
+            if (vm.SavedCustomer != null)
+            {
+                item.UpdateFrom(vm.SavedCustomer);
+            }
+
+            if (result != null && result == true)
+            {
+                MessageBox.Show("User edited successfull");
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error opening customer editor: {ex.Message}");
         }
 
-        if (result != null && result == true)
-        {
-            MessageBox.Show("User edited successfull");
-        }
     }
     protected override void ApplySearchParams()
     {
@@ -225,7 +240,14 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
         else
             Items.Clear();
 
-        await LoadPageAsync(reset: true);
+        try
+        {
+            await LoadPageAsync(reset: true);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Search failed: {ex.Message}");
+        }
     }
 
     private async Task<bool> LoadMoreAsync()
@@ -285,7 +307,14 @@ public class CustomerListViewModel : ListViewModel<CustomerDto, CustomerFilter, 
             OrderDirection = OrderDirection.Ascending;
         }
 
-        await Search();
+        try
+        {
+            await Search();
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Search failed: {ex.Message}");
+        }
         return true;
     }
 
