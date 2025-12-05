@@ -56,13 +56,22 @@
         </Grid>
 
         <DataGrid Grid.Column="1"
-          ItemsSource="{Binding Items, Mode=OneWay}"
+          ItemsSource="{Binding Items, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
           AutoGenerateColumns="False"
           EnableRowVirtualization="True"
           EnableColumnVirtualization="True"
           CanUserSortColumns="False"
           CanUserAddRows="False"
+          IsReadOnly="True"
           ColumnWidth="*">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction
+            Command="{Binding EditCustomerCommand}"
+            CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=DataGrid}}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+
             <i:Interaction.Behaviors>
                 <behaviors:InfiniteScrollBehavior 
             LoadMoreCommand="{Binding LoadMoreCommand}"
@@ -78,7 +87,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Width="*" Binding="{Binding Name}">
+                <DataGridTextColumn Width="*" Binding="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <Button Command="{Binding DataContext.SortByNameCommand,
@@ -96,7 +105,7 @@
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Width="*" Binding="{Binding Email}">
+                <DataGridTextColumn Width="*" Binding="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <Button Command="{Binding DataContext.SortByEmailCommand,
@@ -114,7 +123,7 @@
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Width="*" Binding="{Binding Phone}">
+                <DataGridTextColumn Width="*" Binding="{Binding Phone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <Button Command="{Binding DataContext.SortByPhoneCommand,
@@ -132,7 +141,7 @@
                     </DataGridTextColumn.HeaderTemplate>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Width="*" Binding="{Binding ActiveState}">
+                <DataGridTextColumn Width="*" Binding="{Binding ActiveState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <DataGridTextColumn.HeaderTemplate>
                         <DataTemplate>
                             <Button Command="{Binding DataContext.SortByActiveStateCommand,

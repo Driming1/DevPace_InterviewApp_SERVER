@@ -27,8 +27,15 @@ public class CustomerService : ISearchService<CustomerFilter, CustomerDto>
 
     public async Task<bool> IsEmailUniqueAsync(string email, long? excludeId = null)
     {
-        var response = await _httpClient.Post<object, ApiResponseModel<bool>>
-            ("IsEmailUnique", new { email, id = excludeId });
+        var body = new EmailCheckRequest { Email = email , Id = excludeId };
+        var response = await _httpClient.PostApiResponse<EmailCheckRequest, bool>(
+       "IsEmailUnique",
+       body);
+
         return response.Model;
+    }
+    public async Task<CustomerDto> GetByIdAsync(long id)
+    {
+        return await _httpClient.Get<CustomerDto>(id.ToString());
     }
 }
